@@ -100,6 +100,23 @@ pip install git+https://github.com/openai/CLIP.git
 
 ```
 
+### Verify your environment
+
+Run the lightweight preflight checker before launching a training or inference job. It
+validates Python, `torchrun`, the selected accelerator, installed requirements, and any
+dataset or checkpoint paths you provide:
+
+```bash
+python tools/check_environment.py \
+    --device GPU \
+    --data-root data/VelaScene_data \
+    --checkpoint /path/to/checkpoint.pth
+```
+
+Use `--device NPU` for Ascend or `--skip-device-check` when preparing the environment
+on a machine without the target accelerator. Run `python tools/check_environment.py
+--help` for all options.
+
 ## Dataset Preparation
 
 ### Waymo Dataset
