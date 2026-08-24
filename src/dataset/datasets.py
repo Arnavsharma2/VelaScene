@@ -1,3 +1,4 @@
+from bisect import bisect_right
 import json
 import logging
 import os
@@ -80,20 +81,19 @@ class CustomConcatDataset(ConcatDataset):
                 self.sub_seq_ranges[name] = (start, end)
             self.total_seq_len = sum(self.sub_real_lens)
 
+        self.sub_seq_ends = [
+            self.sub_seq_ranges[name][1] + 1 for name in self.dataset_names
+        ]
+
     def __getitem__(self, seq_idx: int, *args, **kwargs):
         """Map global sequence index to a sample from the corresponding sub-dataset."""
         seq_idx = seq_idx % self.total_seq_len
 
-        # Find the dataset that the sequence index belongs to
-        dataset_name = None
-        for name, (start, end) in self.sub_seq_ranges.items():
-            if start <= seq_idx <= end:
-                dataset_name = name
-                break
-        assert dataset_name is not None
+        # Binary search avoids scanning every sub-dataset for every sample.
+        ds_idx = bisect_right(self.sub_seq_ends, seq_idx)
+        dataset_name = self.dataset_names[ds_idx]
 
         # Calculate local index (no modulo operation here; handled by sub-dataset itself)
-        ds_idx = self.name_to_idx[dataset_name]
         if self.has_specified_sample_nums:
             seq_offset = seq_idx - self.sub_seq_ranges[dataset_name][0]
             local_idx = seq_offset  # Modulo is handled by the sub-dataset
