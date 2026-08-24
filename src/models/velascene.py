@@ -697,21 +697,17 @@ class VelaScene(nn.Module, PyTorchModelHubMixin):
 
     def _time_embed(self, x: Tensor, time: Tensor, num_views=1) -> Tensor:
         if time.ndim == 3:
-            b, t, v = time.shape
-            time_embedding = (
-                self.time_embedder(time.flatten())  # (bt, c)
-                .view(b, t, v, -1)  # (b, t, v, c)
-                .view(-1, 1, self.embed_dim)  # (btv, 1, c)
-                .repeat(1, x.shape[1], 1)  # (btv, n, c)
+            time_embedding = self.time_embedder(time.flatten()).view(
+                -1, 1, self.embed_dim
             )
         else:
             time_embedding = (
                 self.time_embedder(time.flatten())  # (bt, c)
                 .view(time.shape[0], time.shape[1], 1, -1)  # (b, t, 1, c)
-                .repeat(1, 1, num_views, 1)  # (b, t, v, c)
-                .view(-1, 1, self.embed_dim)  # (btv, 1, c)
-                .repeat(1, x.shape[1], 1)  # (btv, n, c)
+                .expand(-1, -1, num_views, -1)  # (b, t, v, c)
+                .reshape(-1, 1, self.embed_dim)  # (btv, 1, c)
             )
+        # Broadcasting avoids materializing one copy per image token.
         return x + time_embedding
 
     def forward_decoder(self, render_results):
