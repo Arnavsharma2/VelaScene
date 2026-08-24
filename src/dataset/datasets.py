@@ -252,7 +252,10 @@ class PerceptualModelDataset(Dataset):
         ref_camera_name = DATASET_DICT[dataset_name]["ref_camera"]
 
         # world_to_canonical
-        world_to_canonical = np.linalg.inv(torch.tensor(cam_to_world[ref_camera_name][source_frame_idx]))
+        canonical_pose = np.asarray(
+            cam_to_world[ref_camera_name][source_frame_idx], dtype=np.float32
+        )
+        world_to_canonical = np.linalg.inv(canonical_pose)
 
         feats = {}  # Support simultaneous distillation of multiple features
         for camera in camera_list:
@@ -868,7 +871,10 @@ class SingleSequenceDataset(PerceptualModelDataset):
         ref_camera_name = DATASET_DICT[scene_json["dataset"]]["ref_camera"]
 
         # world_to_canonical
-        world_to_canonical = np.linalg.inv(torch.tensor(cam_to_world[ref_camera_name][start_index]))  # dtype('float32')
+        canonical_pose = np.asarray(
+            cam_to_world[ref_camera_name][start_index], dtype=np.float32
+        )
+        world_to_canonical = np.linalg.inv(canonical_pose)
 
         clip_start_id = None
         interval = self.get_interval(scene_json['fps'])
