@@ -162,16 +162,20 @@ class PerceptualModelDataset(Dataset):
         # Read all lines from annotation_txt_file_list (scene path/JSON)
         annotation_paths = []
         for annotation_txt_file in annotation_txt_file_list:
-            with open(annotation_txt_file, "r") as f:
-                annotation_paths += [line.strip() for line in f.readlines() if line.strip()]
+            with open(annotation_txt_file, "r", encoding="utf-8") as annotation_file:
+                annotation_paths.extend(
+                    line for raw_line in annotation_file if (line := raw_line.strip())
+                )
 
         if subset_indices is not None:
             annotation_paths = [annotation_paths[i] for i in subset_indices]
 
         self.annotations = []
         for annotation_path in annotation_paths:
-            with open(os.path.join(data_root, annotation_path), "r") as f:
-                self.annotations.append(json.load(f))
+            with open(
+                os.path.join(data_root, annotation_path), "r", encoding="utf-8"
+            ) as annotation_file:
+                self.annotations.append(json.load(annotation_file))
         logger.info(f"Loaded {len(self.annotations)} annotations.")
 
         self.num_replicas = num_replicas
