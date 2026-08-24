@@ -106,14 +106,13 @@ class StreamSession:
     def forward_stream(self, input_dict, device, dtype):
         aggregator_kv_cache_list, camera_head_kv_cache_list = self._get_cache()
 
-        with torch.no_grad():
-            with torch.autocast(device_type=device.type, dtype=dtype):
-                outputs = self.model(  # gs_params, depth ...
-                    input_dict,
-                    stream_save=False,
-                    aggregator_kv_cache_list=aggregator_kv_cache_list,
-                    camera_head_kv_cache_list=camera_head_kv_cache_list,
-                )
+        with torch.inference_mode(), torch.autocast(device_type=device.type, dtype=dtype):
+            outputs = self.model(  # gs_params, depth ...
+                input_dict,
+                stream_save=False,
+                aggregator_kv_cache_list=aggregator_kv_cache_list,
+                camera_head_kv_cache_list=camera_head_kv_cache_list,
+            )
 
         self._update_predictions(outputs)
         self._update_cache(outputs["aggregator_kv_cache_list"], outputs["camera_head_kv_cache_list"])
