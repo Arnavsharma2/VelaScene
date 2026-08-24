@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+message: "VelaScene builds on SLARM. Please cite the original CVPR paper below."
+title: VelaScene
+abstract: "An independent toolkit for streaming, language-aware 4D scene reconstruction."
+type: software
+authors:
+  - family-names: Sharma
+    given-names: Arnav
+repository-code: "https://github.com/Arnavsharma2/VelaScene"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "SLARM: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes"
+  authors:
+    - family-names: Qiu
+      given-names: Zhicheng
+    - family-names: Meng
+      given-names: Jiarui
+    - family-names: Luo
+      given-names: Tong-an
+    - family-names: Huang
+      given-names: Yican
+    - family-names: Feng
+      given-names: Xuan
+    - family-names: Li
+      given-names: Xuanfu
+    - family-names: Xu
+      given-names: Zhan
+  conference:
+    name: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)"
+  year: 2026
+  month: 6
+  start: 29023
+  end: 29034
+references:
+  - type: software
+    title: "SLARM: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes"
+    authors:
+      - family-names: Qiu
+        given-names: Zhicheng
+      - family-names: Meng
+        given-names: Jiarui
+      - family-names: Luo
+        given-names: Tong-an
+      - family-names: Huang
+        given-names: Yican
+      - family-names: Feng
+        given-names: Xuan
+      - family-names: Li
+        given-names: Xuanfu
+      - family-names: Xu
+        given-names: Zhan
+    repository-code: "https://github.com/kevinchiu19/SLARM"
+    url: "https://kevinchiu19.github.io/SLARM/"
