@@ -313,6 +313,7 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
     context_t = tv // v
     target_t = data_dict["target"]["image"].shape[1] // v
     text_label_feats = None
+    non_blocking = device.type == "cuda"
     input_dict = {
         "context_image": data_dict["context"]["image"].reshape(b, context_t, v, c, h, w),
         # targets to render
@@ -393,7 +394,9 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
         images_to_extract_feat = data_dict["context"]["frame_images_to_extract_feat"]
         images_to_extract_feat = einops.rearrange(images_to_extract_feat, 'b tv c h w -> (b tv) c h w')
         with torch.no_grad():
-            feat = feat_extractor.extract_lseg_feat_by_chunk(images_to_extract_feat.to(device), (h, w))
+            feat = feat_extractor.extract_lseg_feat_by_chunk(
+                images_to_extract_feat.to(device, non_blocking=non_blocking), (h, w)
+            )
             # feat = feat_extractor.extract_lseg_feat_one_by_one(images_to_extract_feat.to(device), (h, w))
         feat = einops.rearrange(feat, '(b t v) c h w -> b t v c h w', b=b, v=v)
         input_dict["context_feat"] = feat
@@ -469,7 +472,9 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
         images_to_extract_feat = data_dict["target"]["frame_images_to_extract_feat"]
         images_to_extract_feat = einops.rearrange(images_to_extract_feat, 'b tv c h w -> (b tv) c h w')
         with torch.no_grad():
-            feat = feat_extractor.extract_lseg_feat_by_chunk(images_to_extract_feat.to(device), (h, w))
+            feat = feat_extractor.extract_lseg_feat_by_chunk(
+                images_to_extract_feat.to(device, non_blocking=non_blocking), (h, w)
+            )
             # feat = feat_extractor.extract_lseg_feat_one_by_one(images_to_extract_feat.to(device), (h, w))
         feat = einops.rearrange(feat, '(b t v) c h w -> b t v c h w', b=b, v=v)
         target_dict["target_feat"] = feat
@@ -477,8 +482,14 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
     input_dict["context_frame_idx"] = data_dict["context"]["frame_idx"]
     input_dict["target_frame_idx"] = data_dict["target"]["frame_idx"]
     target_dict["target_frame_idx"] = data_dict["target"]["frame_idx"]
-    input_dict = {k: v.to(device) for k, v in input_dict.items()}
-    target_dict = {k: v.to(device) for k, v in target_dict.items()}
+    input_dict = {
+        key: value.to(device, non_blocking=non_blocking)
+        for key, value in input_dict.items()
+    }
+    target_dict = {
+        key: value.to(device, non_blocking=non_blocking)
+        for key, value in target_dict.items()
+    }
     input_dict["timespan"] = timespan
     input_dict["fps"] = data_dict["fps"]
     input_dict["scene_id"] = data_dict["scene_id"]
