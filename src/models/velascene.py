@@ -726,14 +726,10 @@ class VelaScene(nn.Module, PyTorchModelHubMixin):
         return render_results
 
     def decode_flow(self, ms3):
-        # Extract degree of marginal scale (number of scale components)
         ms3_deg = ms3.shape[-1] // 4
-        # Extract speed components (every 4th element starting from index 3)
-        speed = ms3[..., 3::4, None]  # [B, T, H, W, ms3_deg, 1]
-        # Reshape spatial components (first 3 of every 4 elements)
-        ms3 = torch.cat(
-            [ms3[..., None, i * 4:i * 4 + 3] for i in range(ms3_deg)], dim=-2
-        )  # [B, T, H, W, ms3_deg, 3]
+        components = ms3.unflatten(-1, (ms3_deg, 4))
+        directions = components[..., :3]
+        speed = components[..., 3:]
 
         # Rescale speed with sigmoid and apply clamping threshold
         speed = (speed + self.sigmoid_ms3_bias).sigmoid() * (
@@ -741,17 +737,14 @@ class VelaScene(nn.Module, PyTorchModelHubMixin):
         ) + self.sigmoid_ms3_min
         speed = (speed - self.ms3_clamp).clamp(0)  # Zero out speeds below threshold
 
-        # Apply decay factor to speed based on scale level
-        # Higher scale levels get progressively smaller speeds
-        speed = torch.cat(
-            [speed[..., i:i + 1, :] / self.ms3_deg_downmax_mult**i
-                for i in range(ms3_deg)], dim=-2
-        )  # [B, T, H, W, ms3_deg, 1]
+        decay = speed.new_tensor(
+            [self.ms3_deg_downmax_mult**degree for degree in range(ms3_deg)]
+        )
+        decay = decay.view(*([1] * (speed.ndim - 2)), ms3_deg, 1)
+        speed = speed / decay
 
-        # Apply speed-modulated normalized marginal scales
-        ms3 = speed * F.normalize(ms3[..., :3], dim=-1)  # Normalize and modulate by speed
-        ms3 = ms3.reshape(ms3.shape[:-2] + (-1,))  # Flatten to [B, T, H, W, ms3_deg*3]
-        return ms3
+        flow = speed * F.normalize(directions, dim=-1)
+        return flow.flatten(-2)
 
     def forward_motion_predictor(self, x, motion_tokens=None, gs_params=None, dense_feat=False):
         b, t, v, h, w, _ = gs_params["means"].shape
