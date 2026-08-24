@@ -376,8 +376,7 @@ preferred citation is the original paper below.
 ## Attribution and provenance
 
 VelaScene was independently initialized from
-[kevinchiu19/SLARM](https://github.com/kevinchiu19/SLARM) without copying its Git commit
-history. The upstream MIT license, copyright notice, research authorship, and paper
+[kevinchiu19/SLARM](https://github.com/kevinchiu19/SLARM). The upstream MIT license, copyright notice, research authorship, and paper
 citation are preserved. See [`ATTRIBUTION.md`](ATTRIBUTION.md) for the imported revision
 and a concise record of VelaScene's changes.
 
