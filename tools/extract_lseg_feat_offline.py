@@ -113,12 +113,12 @@ def extract_lseg_feat(lseg_model, x, save_path):
 lseg_model = load_model().cuda()
 
 # use 089 scene currently
-data_path = 'xxx/SLARM_data/datasets/waymo/training/089/images/*_0.jpg'  # _0 indicates front camera
+data_path = 'xxx/VelaScene_data/datasets/waymo/training/089/images/*_0.jpg'  # _0 indicates front camera
 image_paths = glob(data_path)
 image_paths.sort()
 print(len(image_paths))
 
-save_feat_path = 'xxx/SLARM_data/datasets/waymo/training/089/features/lseg'
+save_feat_path = 'xxx/VelaScene_data/datasets/waymo/training/089/features/lseg'
 
 for image_path in tqdm(image_paths):
     image = Image.open(image_path)

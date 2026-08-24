@@ -1,11 +1,13 @@
 <div align="center">
 
 <h1>
-  SLARM: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes
+  VelaScene
 </h1>
 
-<a href="https://arxiv.org/abs/2603.22893"><img src='https://img.shields.io/badge/arXiv-SLARM-red' alt='Paper PDF'></a>
-<a href='https://kevinchiu19.github.io/SLARM/'><img src='https://img.shields.io/badge/Project_Page-SLARM-green' alt='Project Page'></a>
+<p><strong>Streaming, language-aware 4D scene reconstruction toolkit</strong></p>
+
+<a href="https://github.com/kevinchiu19/SLARM"><img src="https://img.shields.io/badge/foundation-SLARM-4c6ef5" alt="Built on SLARM"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
 
 </div>
 
@@ -13,24 +15,32 @@
 
 <img src="assets/teaser.png" alt="Teaser" width="90%" />
 
+<sub>Original SLARM teaser image, retained with attribution to the upstream authors.</sub>
+
 </div>
 
+VelaScene is an independent, early-stage derivative for building streaming,
+language-aware dynamic-scene systems. It currently carries forward the SLARM baseline
+under VelaScene entry points, model names, data paths, and experiment defaults so it can
+evolve as a distinct project.
 
-This repository will contain the official implementation of SLARM, a feed-forward model that unifies dynamic scene reconstruction, semantic understanding, and real-time streaming inference.
+VelaScene is not the official SLARM implementation. The research architecture and
+published results come from [kevinchiu19/SLARM](https://github.com/kevinchiu19/SLARM),
+which is credited throughout this repository and in the citation metadata.
 
-## 📢 News
-- **[2026-06]** 🎉 Training and evaluation code of SLARM is available now!
-- **[2026-04]** 🎉 SLARM has been selected as a highlight paper!
-- **[2026-02]** 🎉 SLARM has been accepted to CVPR 2026! Code coming soon!
+## Project direction
 
----
+- Keep a clean, streaming-first interface for dynamic scene reconstruction.
+- Extend language-aligned 3D understanding without tying the project to one dataset.
+- Make accelerator, dependency, data, and checkpoint setup easier to validate.
 
-## Highlights
-* **Fast, feed-forward, streaming inference, and self-supervised** dynamic scene reconstruction from sparse multi-view sequences.
-* Learns **3D Gaussian** *and* **scene flow** jointly; supports real-time rendering (once Gaussians are generated) and semantic segmentation.
-* SLARM achieves **state-of-the-art** results in dynamic estimation, rendering quality, and scene parsing, improving motion accuracy by **21%**, reconstruction PSNR by **1.6 dB**, and segmentation mIoU by **20%** over existing methods.
+## Upstream foundation
 
----
+The inherited SLARM baseline provides feed-forward streaming inference, joint 3D
+Gaussian and scene-flow learning, real-time rendering after Gaussian generation, and
+semantic segmentation. Benchmark claims in the original project—including its reported
+motion, reconstruction, and segmentation improvements—belong to the SLARM authors and
+have not yet been independently revalidated as VelaScene results.
 
 ## Installation
 > Tested with **PyTorch 2.1.0** and an Ascend **910C(A3)**
@@ -38,8 +48,8 @@ This repository will contain the official implementation of SLARM, a feed-forwar
 
 ```bash
 # create conda environment
-conda create -n SLARM python=3.10 -y
-conda activate SLARM
+conda create -n VelaScene python=3.10 -y
+conda activate VelaScene
 
 # ======================================== for Ascend NPU ========================================
 # Install PyTorch
@@ -94,13 +104,15 @@ pip install git+https://github.com/openai/CLIP.git
 
 ### Waymo Dataset
 - To prepare the Waymo Open Dataset, please refer to [Waymo Data](docs/WAYMO.md)
-- We provide a tiny subset of Waymo Open Dataset (1 sequences) for quick experimentation: [SLARM_data_demo](https://drive.google.com/file/d/1Dsh0nUXsLdFBllkq8EVC1xQoclOq7KeL/view?usp=drive_link)
+- The SLARM authors provide one small Waymo sequence for quick experimentation: [original SLARM data demo](https://drive.google.com/file/d/1Dsh0nUXsLdFBllkq8EVC1xQoclOq7KeL/view?usp=drive_link)
 
 ## Checkpoints
 
 To enable the Lseg distillation, download the model weights provided by [Lseg official model](https://drive.google.com/file/d/1FTuHY1xPUkM-5gaDtMfgCl3D0gR89WV7/view?usp=sharing), place to `ckpts/demo_e200.ckpt`, then run `PYTHONPATH=$(pwd) python tools/convert_lseg_model.py` to generate the new weights we need.
 
-Due to company policy reasons, it is not convenient to share the pre-trained model weights at the moment. You should be able to reproduce the results of the paper using the provided code. Please feel free to contact me if you have any questions.
+The upstream authors do not currently distribute pretrained SLARM weights. The inherited
+training code is provided to reproduce the baseline where the required data and hardware
+are available.
 
 
 ## Inference
@@ -145,7 +157,7 @@ fi
 # Set model configuration
 export FEAT_DIST=1
 export DATASET=waymo
-export DATA_ROOT=data/SLARM_data
+export DATA_ROOT=data/VelaScene_data
 # export OVERFIT_EXP=1
 # export SCENE_ID_WAYMO=525
 # export PROFILING=1  # Printing takes time
@@ -153,7 +165,7 @@ export DATA_ROOT=data/SLARM_data
 export MASTER_PORT=16818
 export DEVICE_NUM=1
 export BS_PER_DEVICE=1
-export PROJECT=slarm
+export PROJECT=velascene
 export EXP_NAME=exp_0527
 
 export SCENE_ID=525
@@ -168,7 +180,7 @@ torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} inference.py 
     --exp_name ${EXP_NAME} \
     --dataset ${DATASET} \
     --data_root $DATA_ROOT \
-    --model slarm \
+    --model velascene \
     --load_depth --load_flow --load_ground \
     --num_max_cameras 3 --use_affine_token \
     --sigmoid_rgb \
@@ -197,7 +209,7 @@ torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} inference.py 
 
 ## Training & Evaluation
 
-Multi-GPU example that reproduces the paper's SLARM model:
+Multi-GPU example for the baseline architecture inherited from SLARM:
 
 ```bash
 #!/bin/bash
@@ -239,7 +251,7 @@ fi
 # Set model configuration
 export FEAT_DIST=1
 export DATASET=waymo
-export DATA_ROOT=data/SLARM_data
+export DATA_ROOT=data/VelaScene_data
 export OVERFIT_EXP=1
 export SCENE_ID_WAYMO=525
 # export PROFILING=1  # Printing takes time
@@ -247,13 +259,13 @@ export SCENE_ID_WAYMO=525
 export MASTER_PORT=16818
 export DEVICE_NUM=1
 export BS_PER_DEVICE=1
-export PROJECT=slarm
+export PROJECT=velascene
 export EXP_NAME=exp_0527
 # export CKPT_PTH=xxx.pth
 
 
-# python -m debugpy --listen 13688 --wait-for-client main_slarm.py \
-torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_slarm.py \
+# python -m debugpy --listen 13688 --wait-for-client main_velascene.py \
+torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_velascene.py \
     --project ${PROJECT} \
     --exp_name ${EXP_NAME} \
     --dataset ${DATASET} \
@@ -262,7 +274,7 @@ torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_slarm.py
     --vis_every_n_iters 500 \
     --eval_every_n_iters 10000 --keep_n_ckpts 30 --ckpt_every_n_iters 10000 \
     --enable_tensorboard \
-    --model slarm \
+    --model velascene \
     --load_depth --load_flow --load_ground \
     --load_semantic_label \
     --num_max_cameras 3 --use_affine_token \
@@ -290,7 +302,7 @@ torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_slarm.py
 > **Tips:**
 > - Checkpoints and logs are saved at `work_dirs/<project>/<exp_name>`
 > - `batch_size` is per-GPU; global batch = batch_size × #GPUs × #nodes
-> - For additional arguments, see `main_slarm.py`
+> - For additional arguments, see `main_velascene.py`
 > - To switch to streaming (online) mode, you can use the parameter `--mode window_3` and then select appropriate weights from the offline model as initialization using the `--load_from $CKPT_PTH` parameter
 > - To enable semantic label loss (for finetune), you can use `--feat_loss_type cls_prob`
 > - To enable the evaluation mode, you can modify `--auto_resume` to `--load_from $CKPT_PTH` & `--evaluate`
@@ -327,6 +339,9 @@ python tools/pc_viewer_campose.py \
 
 ## Citation
 
+If you use the inherited model, implementation, or published findings, cite the original
+SLARM paper:
+
 ```bibtex
 @InProceedings{Qiu_2026_CVPR,
     author    = {Qiu, Zhicheng and Meng, Jiarui and Luo, Tong-an and Huang, Yican and Feng, Xuan and Li, Xuanfu and Xu, Zhan},
@@ -340,5 +355,5 @@ python tools/pc_viewer_campose.py \
 
 ## Acknowledgements
 
-Our implementation builds upon **gsplat**, **GaussianSTORM**, **4DGT**.
-We thank the respective authors for open‑sourcing their excellent work.
+The inherited SLARM implementation builds upon **gsplat**, **GaussianSTORM**, and
+**4DGT**. We retain the upstream authors' thanks to those projects and their contributors.

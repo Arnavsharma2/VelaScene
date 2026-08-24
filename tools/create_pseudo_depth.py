@@ -148,7 +148,7 @@ if __name__ == "__main__":
     device = torch.device("cuda")
     model = DepthAnything3.from_pretrained("depth-anything/DA3NESTED-GIANT-LARGE") # "depth-anything/da3mono-large"
     model = model.to(device=device)
-    root_directory = "xxx/SLARM_data/datasets/waymo/training"
+    root_directory = "xxx/VelaScene_data/datasets/waymo/training"
     for folder in os.listdir(root_directory):
         folder_path = os.path.join(root_directory, folder)
         if not os.path.isdir(folder_path):

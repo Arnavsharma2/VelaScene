@@ -37,7 +37,7 @@ fi
 # Set model configuration
 export FEAT_DIST=1
 export DATASET=waymo
-export DATA_ROOT=data/SLARM_data
+export DATA_ROOT=data/VelaScene_data
 export OVERFIT_EXP=1
 export SCENE_ID_WAYMO=80
 # export PROFILING=1  # Printing takes time
@@ -45,7 +45,7 @@ export SCENE_ID_WAYMO=80
 export MASTER_PORT=16818
 export DEVICE_NUM=1
 export BS_PER_DEVICE=1
-export PROJECT=slarm
+export PROJECT=velascene
 export EXP_NAME=exp_0528
 export CKPT_PTH=xxx.pth
 
@@ -53,10 +53,10 @@ export CKPT_PTH=xxx.pth
 # The model parameters need to be consistent with those used during training;
 # additional parameters such as load_from, text_list, and sample_index need to be specified.
 python text_query_visualizing.py \
-    --project slarm_text_query_visualizing \
+    --project velascene_text_query_visualizing \
     --exp_name seg_vis \
     --data_root $DATA_ROOT \
-    --model slarm \
+    --model velascene \
     --load_depth --load_flow --load_ground \
     --num_max_cameras 3 --use_affine_token \
     --sigmoid_rgb \

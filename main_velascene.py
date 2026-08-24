@@ -49,7 +49,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser("PerceptualModel training", add_help=False)
 
     # =============== Model parameters ================= #
-    parser.add_argument("--model", default="slarm", type=str)
+    parser.add_argument("--model", default="velascene", type=str)
     parser.add_argument("--num_context_timesteps", default=4, type=int)
     parser.add_argument("--num_target_timesteps", default=4, type=int)
     parser.add_argument("--gs_dim", default=3, type=int, help="Number of gs dimensions")
@@ -189,7 +189,7 @@ def get_args_parser():
     parser.add_argument("--load_from", type=str, default=None)
 
     # ============= Dataset parameters ============= #
-    parser.add_argument("--data_root", default="./data/SLARM_data", type=str, help="dataset path")
+    parser.add_argument("--data_root", default="./data/VelaScene_data", type=str, help="dataset path")
     parser.add_argument("--batch_size", default=8, type=int, help="Batch size per GPU")
     parser.add_argument("--eval_batch_size", type=int, default=1)
     parser.add_argument("--input_size", default=(160, 240), type=int, nargs=2)
@@ -280,7 +280,7 @@ def main(args):
 
     # set up logging
     setup_logging(output=log_dir, level=logging.INFO)
-    logger = logging.getLogger("SLARM")
+    logger = logging.getLogger("VelaScene")
     logger.info(f"hostname: {os.uname().nodename}\n")
     logger.info(f"job dir: {os.path.dirname(os.path.realpath(__file__))}")
     logger.info(f"Logging to {log_dir}")

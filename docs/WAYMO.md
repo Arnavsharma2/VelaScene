@@ -97,7 +97,7 @@ python preprocess.py \
     --scene_ids 700 754 23 \
     --num_workers 8 \
     --process_keys images lidar calib pose dynamic_masks ground \
-    --json_folder_to_save data/SLARM_data/annotations/waymo 
+    --json_folder_to_save data/VelaScene_data/annotations/waymo
 ```
 Alternatively, preprocess a batch of scenes by providing the split file:
 ```bash
@@ -111,7 +111,7 @@ python preprocess.py \
     --num_scenes 798 \
     --num_workers 8 \
     --process_keys images lidar calib pose dynamic_masks ground \
-    --json_folder_to_save data/SLARM_data/annotations/waymo 
+    --json_folder_to_save data/VelaScene_data/annotations/waymo
 
 # training set (for semantic)
 python preprocess.py \
@@ -123,7 +123,7 @@ python preprocess.py \
     --num_scenes 798 \
     --num_workers 8 \
     --process_keys panoptic_segs \
-    --json_folder_to_save data/SLARM_data/annotations/waymo \
+    --json_folder_to_save data/VelaScene_data/annotations/waymo \
     --only_process_semantic
 
 # validation set (for scene flow)
@@ -136,7 +136,7 @@ python preprocess.py \
     --num_scenes 202 \
     --num_workers 8 \
     --process_keys images lidar calib pose dynamic_masks ground \
-    --json_folder_to_save data/SLARM_data/annotations/waymo 
+    --json_folder_to_save data/VelaScene_data/annotations/waymo
 
 # validation set (for semantic)
 python preprocess.py \
@@ -148,8 +148,8 @@ python preprocess.py \
     --num_scenes 202 \
     --num_workers 8 \
     --process_keys panoptic_segs \
-    --json_folder_to_save data/SLARM_data/annotations/waymo \
-    --only_process_semantic 
+    --json_folder_to_save data/VelaScene_data/annotations/waymo \
+    --only_process_semantic
 ```
 The extracted data will be stored in the `data/waymo/processed` directory.
 
@@ -209,21 +209,21 @@ ProjectPath/data/
 ## 7. Final Preparations
 
 1. Create a symbolic link to the directory  (Change the xxx to an absolute path)
-mkdir -p data/SLARM_data/datasets
-ln -s xxx/data/waymo/processed data/SLARM_data/datasets/waymo
+mkdir -p data/VelaScene_data/datasets
+ln -s xxx/data/waymo/processed data/VelaScene_data/datasets/waymo
 
 2. Generate a txt file specifying the scene during training/validation.
 a. create file
-mkdir -p data/SLARM_data/scene_list/
-touch data/SLARM_data/scene_list/waymo_train.txt
-touch data/SLARM_data/scene_list/waymo_val.txt
+mkdir -p data/VelaScene_data/scene_list/
+touch data/VelaScene_data/scene_list/waymo_train.txt
+touch data/VelaScene_data/scene_list/waymo_val.txt
 
 b. Use Python to read parsed data.  (The same goes for validation)
-python -c 'import os; [print(os.path.join("annotations/waymo/training/", i)) for i in os.listdir("data/SLARM_data/annotations/waymo/training")]'
+python -c 'import os; [print(os.path.join("annotations/waymo/training/", i)) for i in os.listdir("data/VelaScene_data/annotations/waymo/training")]'
 
-c. and then copy to data/SLARM_data/scene_list/waymo_train.txt.
+c. and then copy to data/VelaScene_data/scene_list/waymo_train.txt.
 
-This data/SLARM_data/scene_list/waymo_train.txt is like:
+This data/VelaScene_data/scene_list/waymo_train.txt is like:
 annotations/waymo/training/segment-10275144660749673822_5755_561_5775_561_with_camera_labels.json
 annotations/waymo/training/segment-9320169289978396279_1040_000_1060_000_with_camera_labels.json
 annotations/waymo/training/segment-17902907331132202998_1564_000_1584_000_with_camera_labels.json

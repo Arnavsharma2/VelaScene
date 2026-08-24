@@ -52,7 +52,7 @@ def load_cams(cam_file):
     return c2w
 
 
-data_root = 'data/SLARM_data/'
+data_root = 'data/VelaScene_data/'
 dataset_name = 'driving_sim'
 datasets_path = 'training'
 cam_list = ["front_left", "front", "front_right", "rear_left", "rear", "rear_right"]
@@ -139,5 +139,5 @@ for scene in scene_list:
 print('done')
 
 # sky mask
-# find data/SLARM_data/datasets/driving_sim/training/*/*/vis/color -name "*.png" > file_list.txt
+# find data/VelaScene_data/datasets/driving_sim/training/*/*/vis/color -name "*.png" > file_list.txt
 # CUDA_VISIBLE_DEVICES=7 python extract_sky.py --file_list ./file_list.txt --rgb_type png --rgb_dir color

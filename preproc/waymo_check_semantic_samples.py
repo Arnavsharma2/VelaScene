@@ -1,9 +1,9 @@
 import os
 
 
-# fpath = 'xxx/SLARM_data/datasets/waymo/validation'
+# fpath = 'xxx/VelaScene_data/datasets/waymo/validation'
 # scenes = 202
-fpath = 'xxx/SLARM_data/datasets/waymo/training'
+fpath = 'xxx/VelaScene_data/datasets/waymo/training'
 scenes = 798
 
 num_scenes_all = 0

@@ -9,7 +9,7 @@ IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff')
 
 class ImageViewer:
     def __init__(self):
-        self.data_root_path = 'xxx/SLARM_data/datasets/waymo/training'
+        self.data_root_path = 'xxx/VelaScene_data/datasets/waymo/training'
         self.scene_paths = sorted(glob(self.data_root_path + '/*'))
         self.scene_id = 0
         self.image_paths = []

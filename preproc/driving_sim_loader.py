@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
 '''
 # check waymo flow & depth
-flow_path = "xxx/SLARM_data/datasets/waymo/training/089/depth_flows_4/198_0.npy"
+flow_path = "xxx/VelaScene_data/datasets/waymo/training/089/depth_flows_4/198_0.npy"
 
 depth_and_flow = np.load(flow_path)
 flow_np = depth_and_flow[..., 1:]

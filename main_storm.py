@@ -96,7 +96,7 @@ def get_args_parser():
     parser.add_argument("--load_from", type=str, default=None)
 
     # ============= Dataset parameters ============= #
-    parser.add_argument("--data_root", default="./data/SLARM_data", type=str, help="dataset path")
+    parser.add_argument("--data_root", default="./data/VelaScene_data", type=str, help="dataset path")
     parser.add_argument("--batch_size", default=8, type=int, help="Batch size per GPU")
     parser.add_argument("--eval_batch_size", type=int, default=1)
     parser.add_argument("--input_size", default=(160, 240), type=int, nargs=2)

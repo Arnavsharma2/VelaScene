@@ -45,8 +45,8 @@ def build_model(args):
             add_angular_velocity=args.add_angular_velocity,
             use_render_novel_view=args.use_render_novel_view,
         )
-    elif args.model == 'slarm':
-        model = models.SLARM(
+    elif args.model == 'velascene':
+        model = models.VelaScene(
             img_size=args.input_size,
             gs_dim=args.gs_dim,
             decoder_type=args.decoder_type,

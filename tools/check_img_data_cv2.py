@@ -1,7 +1,7 @@
 import cv2
 from glob import glob
 
-data_root_path = 'xxx/SLARM_data/datasets/waymo/training'
+data_root_path = 'xxx/VelaScene_data/datasets/waymo/training'
 
 scene_path = glob(data_root_path + '/*')
 scene_num = len(scene_path)

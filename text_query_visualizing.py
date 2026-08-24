@@ -19,7 +19,7 @@ from src.utils.logging import setup_logging
 from src.visualization.video_maker import make_video
 from src.dataset.constants import SEMANTIC_ID_TO_COLOR
 from tools.lseg_feat_extractor import LSegFeatureExtractor
-from main_slarm import get_args_parser
+from main_velascene import get_args_parser
 if os.getenv("FEAT_DIST"):
     from tools.feats_tools import get_text_label_feats, feat2class
 
@@ -70,7 +70,7 @@ def main(args):
 
     # set up logging
     setup_logging(output=log_dir, level=logging.INFO)
-    logger = logging.getLogger("SLARM")
+    logger = logging.getLogger("VelaScene")
     logger.info(f"hostname: {os.uname().nodename}\n")
     logger.info(f"job dir: {os.path.dirname(os.path.realpath(__file__))}")
     logger.info(f"Logging to {log_dir}")
@@ -110,7 +110,7 @@ def main(args):
     logger.info(f"Dataset contains {len(dataset_vis):,} sequences using {dataset_annotation}.")
 
     # build model
-    assert args.model == 'slarm'
+    assert args.model == 'velascene'
     model = build_model(args)
 
     logger.info(f"Model = {str(model)}")

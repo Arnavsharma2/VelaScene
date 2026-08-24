@@ -63,7 +63,7 @@ b2d_camera_tags2path_name = {
 }
 
 
-data_root = 'data/SLARM_data'
+data_root = 'data/VelaScene_data'
 dataset_name = 'b2d'
 datasets_path = 'training'
 cam_list = ["CAM_FRONT_LEFT", "CAM_FRONT", "CAM_FRONT_RIGHT", "CAM_BACK_RIGHT", "CAM_BACK", "CAM_BACK_LEFT"]

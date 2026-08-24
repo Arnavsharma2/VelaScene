@@ -37,7 +37,7 @@ fi
 # Set model configuration
 export FEAT_DIST=1
 export DATASET=waymo
-export DATA_ROOT=data/SLARM_data
+export DATA_ROOT=data/VelaScene_data
 export OVERFIT_EXP=1
 export SCENE_ID_WAYMO=80
 # export PROFILING=1  # Printing takes time
@@ -45,13 +45,13 @@ export SCENE_ID_WAYMO=80
 export MASTER_PORT=16818
 export DEVICE_NUM=1
 export BS_PER_DEVICE=1
-export PROJECT=slarm
+export PROJECT=velascene
 export EXP_NAME=exp_0528
 # export CKPT_PTH=xxx.pth
 
 
-# python -m debugpy --listen 13688 --wait-for-client main_slarm.py \
-torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_slarm.py \
+# python -m debugpy --listen 13688 --wait-for-client main_velascene.py \
+torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_velascene.py \
     --project ${PROJECT} \
     --exp_name ${EXP_NAME} \
     --dataset ${DATASET} \
@@ -60,7 +60,7 @@ torchrun --nproc_per_node=$DEVICE_NUM --master_port ${MASTER_PORT} main_slarm.py
     --vis_every_n_iters 500 \
     --eval_every_n_iters 10000 --keep_n_ckpts 30 --ckpt_every_n_iters 10000 \
     --enable_tensorboard \
-    --model slarm \
+    --model velascene \
     --load_depth --load_flow --load_ground \
     --load_semantic_label \
     --num_max_cameras 3 --use_affine_token \

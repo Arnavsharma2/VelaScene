@@ -2,14 +2,14 @@ from collections import defaultdict
 
 import torch
 
-from src.models.slarm import SLARM
+from src.models.velascene import VelaScene
 
 
 class StreamSession:
     """
     A causal streaming inference session with KV cache management.
     """
-    def __init__(self, model: SLARM, mode: str, window_size=4):
+    def __init__(self, model: VelaScene, mode: str, window_size=4):
         self.model = model
         self.mode = mode
         self.aggregator_kv_cache_depth = self.model.aggregator.depth

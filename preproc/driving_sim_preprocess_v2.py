@@ -49,7 +49,7 @@ def load_cams(cam_file):
     return c2w
 
 
-data_root = 'data/SLARM_data'
+data_root = 'data/VelaScene_data'
 dataset_name = 'driving_sim'
 datasets_path = 'training'
 cam_list = ["front_left", "front", "front_right", "back_right", "back", "back_left"]

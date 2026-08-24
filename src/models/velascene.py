@@ -49,7 +49,7 @@ _RESNET_MEAN = [0.485, 0.456, 0.406]
 _RESNET_STD = [0.229, 0.224, 0.225]
 
 
-class SLARM(nn.Module, PyTorchModelHubMixin):
+class VelaScene(nn.Module, PyTorchModelHubMixin):
     '''Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes'''
 
     output_format='bcthw'

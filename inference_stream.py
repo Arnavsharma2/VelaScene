@@ -21,7 +21,7 @@ from src.dataset.datasets import PerceptualModelDataset
 from src.utils.logging import setup_logging
 from src.visualization.video_maker import make_video, make_clean_video
 from tools.lseg_feat_extractor import LSegFeatureExtractor
-from main_slarm import get_args_parser
+from main_velascene import get_args_parser
 from src.models.stream_session import StreamSession
 
 torch.backends.cuda.matmul.allow_tf32 = True

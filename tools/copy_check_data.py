@@ -149,6 +149,6 @@ def main(root_directory, target_directory, max_workers=8):
 
 # Example usage
 if __name__ == "__main__":
-    root_directory = "xxx/SLARM_data/datasets/waymo/training"
-    target_directory = "xxx/SLARM_data/datasets/waymo/training"
+    root_directory = "xxx/VelaScene_data/datasets/waymo/training"
+    target_directory = "xxx/VelaScene_data/datasets/waymo/training"
     main(root_directory, target_directory, max_workers=8)

@@ -18,11 +18,11 @@ SCENE_ID = '089'
 IMG_ID = 0
 
 
-data_path = f'xxx/SLARM_data/datasets/waymo/training/{SCENE_ID}/images/*_0.jpg'  # _0 indicates front camera
+data_path = f'xxx/VelaScene_data/datasets/waymo/training/{SCENE_ID}/images/*_0.jpg'  # _0 indicates front camera
 image_paths = glob(data_path)
 image_paths.sort()
 
-saved_feat_path = f'xxx/SLARM_data/datasets/waymo/training/{SCENE_ID}/features/lseg'
+saved_feat_path = f'xxx/VelaScene_data/datasets/waymo/training/{SCENE_ID}/features/lseg'
 
 pretrained_path = "/home/tangzerui/luotongan/playground/lang-seg/lseg_model_pretrained.pth"
 scratch_path = "/home/tangzerui/luotongan/playground/lang-seg/lseg_model_scratch.pth"

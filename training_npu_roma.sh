@@ -22,9 +22,9 @@ CONDA_ENV="xxx"  # To be modified
 RENDER_OP_VERSION=1212
 
 DATASET=waymo
-PROJECT=slarm
+PROJECT=velascene
 EXP_NAME=exp_0527
-DATA_ROOT=data/SLARM_data
+DATA_ROOT=data/VelaScene_data
 BS_PER_DEVICE=1
 
 
@@ -42,7 +42,7 @@ sudo -i bash -i -c "
     bash replace_meta_gauss_render.sh ${CONDA_ENV} ${RENDER_OP_VERSION} && \
     bash cp_clip_weight.sh && \
     torchrun --nnodes=${MA_NUM_HOSTS} --nproc_per_node=${MA_NUM_GPUS} --node_rank=${VC_TASK_INDEX} \
-        --master_addr=${MASTER_ADDR} --master_port=${MASTER_PORT} main_slarm.py \
+        --master_addr=${MASTER_ADDR} --master_port=${MASTER_PORT} main_velascene.py \
         --project ${PROJECT} \
         --exp_name ${EXP_NAME} \
         --dataset ${DATASET} \
@@ -51,7 +51,7 @@ sudo -i bash -i -c "
         --vis_every_n_iters 500 \
         --eval_every_n_iters 10000 --keep_n_ckpts 30 --ckpt_every_n_iters 10000 \
         --enable_tensorboard \
-        --model slarm \
+        --model velascene \
         --load_depth --load_flow --load_ground \
         --load_semantic_label \
         --num_max_cameras 3 --use_affine_token \
