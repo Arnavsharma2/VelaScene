@@ -33,12 +33,14 @@ def feat2class(feats, text_label_feats, similarity_probs_threshold=0.2, return_p
     similarity = feats @ text_label_feats.T / 0.07  # 0.07 is temperature aligned with LSeg
     probs = torch.softmax(similarity, dim=-1)
     if similarity_probs_threshold > 0.0:
-        for i in range(1, probs.shape[-1]):  # NOTE: 'others' in class idx 0
-            p = probs[:, i]
-            p[p < similarity_probs_threshold] = 0.0
+        # Class zero is "others" and remains unthresholded.
+        foreground = probs[..., 1:]
+        foreground = foreground.masked_fill(
+            foreground < similarity_probs_threshold, 0.0
+        )
+        probs = torch.cat((probs[..., :1], foreground), dim=-1)
     if return_probs:
         return probs
     semantic = torch.argmax(probs, dim=-1)
     semantic = semantic.long()
     return semantic
-
