@@ -423,15 +423,18 @@ def main(args):
         shuffle=True,
         seed=seed
     )
+    loader_worker_options = {
+        "num_workers": args.num_workers,
+        "pin_memory": device.type == "cuda",
+        "persistent_workers": args.num_workers > 0,
+    }
 
     # dataloader for training and visualization
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train,
         sampler=sampler_train,
         batch_size=args.batch_size,
-        num_workers=args.num_workers,
-        pin_memory=False,
-        persistent_workers=True,
+        **loader_worker_options,
         drop_last=True,
     )
 
@@ -445,20 +448,16 @@ def main(args):
         data_loader_eval = torch.utils.data.DataLoader(
             dataset_eval,
             batch_size=args.eval_batch_size,
-            num_workers=args.num_workers,
             sampler=sampler,
-            pin_memory=False,
-            persistent_workers=True,
+            **loader_worker_options,
             shuffle=False,
             drop_last=False,
         )
         data_loader_eval_flow = torch.utils.data.DataLoader(
             dataset_eval_flow,
             batch_size=args.eval_batch_size,
-            num_workers=args.num_workers,
             sampler=sampler,
-            pin_memory=False,
-            persistent_workers=True,
+            **loader_worker_options,
             shuffle=False,
             drop_last=False,
         )
