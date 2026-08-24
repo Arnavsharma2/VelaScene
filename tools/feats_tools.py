@@ -12,8 +12,9 @@ def _load_text_features_cached(semantic_label_list, device_str):
     device = torch.device(device_str)
     dtype = torch.float16 if os.environ.get('DISABLE_BFLOAT') else torch.bfloat16
     clip_pretrained, _ = clip.load("ViT-B/32", device=device, jit=False)
-    text_label_inputs = clip.tokenize(semantic_label_list)
-    text_label_inputs = text_label_inputs.cuda()
+    text_label_inputs = clip.tokenize(semantic_label_list).to(
+        device, non_blocking=device.type == "cuda"
+    )
     with torch.autocast(device.type, dtype=dtype), torch.no_grad():
         text_label_feats = clip_pretrained.encode_text(text_label_inputs)
         text_label_feats = text_label_feats / text_label_feats.norm(dim=-1, keepdim=True)
