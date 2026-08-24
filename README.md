@@ -24,10 +24,6 @@ language-aware dynamic-scene systems. It currently carries forward the SLARM bas
 under VelaScene entry points, model names, data paths, and experiment defaults so it can
 evolve as a distinct project.
 
-VelaScene is not the official SLARM implementation. The research architecture and
-published results come from [kevinchiu19/SLARM](https://github.com/kevinchiu19/SLARM),
-which is credited throughout this repository and in the citation metadata.
-
 ## Project direction
 
 - Keep a clean, streaming-first interface for dynamic scene reconstruction.
@@ -381,6 +377,8 @@ citation are preserved. See [`ATTRIBUTION.md`](ATTRIBUTION.md) for the imported 
 and a concise record of VelaScene's changes.
 
 ## Acknowledgements
+
+VelaScene is not an official SLARM implementation.
 
 The inherited SLARM implementation builds upon **gsplat**, **GaussianSTORM**, and
 **4DGT**. We retain the upstream authors' thanks to those projects and their contributors.
