@@ -12,21 +12,9 @@ def _get_torch_dtype(size: int) -> Any:
 
 
 def _generate_randperm_indices(*, size: int, generator: torch.Generator):
-    """
-    Generate the indices of a random permutation.
-
-    This matches PyTorch's CPU implementation.
-    See: https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/native/TensorFactories.cpp#L900-L921
-    """
+    """Generate a random permutation without per-index tensor synchronization."""
     dtype = _get_torch_dtype(size)
-    perm = torch.arange(size, dtype=dtype)
-    for i in range(size):
-        j = torch.randint(i, size, size=(1,), generator=generator).item()
-        # Always swap even if no-op
-        value = perm[j].item()
-        perm[j] = perm[i].item()
-        perm[i] = value
-        yield value
+    yield from torch.randperm(size, dtype=dtype, generator=generator).tolist()
 
 
 class InfiniteSampler(Sampler):
