@@ -94,13 +94,12 @@ class NoPaddingDistributedSampler(Sampler):
 
     def __iter__(self):
         """Yield indices for the current rank."""
-        indices = list(range(len(self.dataset)))
         if self.shuffle:
             g = torch.Generator()
             g.manual_seed(0)
-            indices = torch.randperm(len(indices), generator=g).tolist()
-        indices = indices[self.rank_start : self.rank_end]
-        return iter(indices)
+            indices = torch.randperm(len(self.dataset), generator=g)
+            return iter(indices[self.rank_start : self.rank_end].tolist())
+        return iter(range(self.rank_start, self.rank_end))
 
     def __len__(self):
         """Return the number of samples for the current rank."""
