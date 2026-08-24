@@ -98,7 +98,7 @@ def build_model(args):
     return model
 
 
-@torch.no_grad()
+@torch.inference_mode()
 def visualize(args, model, dset_train, step, train_vis_id, device,
     dset_val=None, val_vis_id=None, log_writer=None, feat_extractor=None):
     model.eval()
@@ -134,7 +134,7 @@ def visualize(args, model, dset_train, step, train_vis_id, device,
     return train_vis_id + 1, val_vis_id + 1 if val_vis_id is not None else None
 
 
-@torch.no_grad()
+@torch.inference_mode()
 def evaluate(dataloader, model, args, name_str=None):
     torch.cuda.empty_cache()
     model.eval()
@@ -575,7 +575,7 @@ def evaluate(dataloader, model, args, name_str=None):
     return result
 
 
-@torch.no_grad()
+@torch.inference_mode()
 def evaluate_flow(dataloader, model, args, name_str=None):
     torch.cuda.empty_cache()
     model.eval()
@@ -727,7 +727,7 @@ def evaluate_flow(dataloader, model, args, name_str=None):
     return result
 
 
-@torch.no_grad()
+@torch.inference_mode()
 def evaluate_semantic(dataloader, model, args, name_str=None, feat_extractor=None):
     torch.cuda.empty_cache()
     model.eval()
