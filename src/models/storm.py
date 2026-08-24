@@ -793,43 +793,47 @@ class STORM(ViT):
                                  trans_y=-5,
                                  trans_z=2):
         def rotation_matrix_y(theta_degrees):
-            theta = np.radians(theta_degrees)
-            cos_theta = np.cos(theta)
-            sin_theta = np.sin(theta)
-            return np.array([
+            theta = math.radians(theta_degrees)
+            cos_theta = math.cos(theta)
+            sin_theta = math.sin(theta)
+            return target_camtoworlds.new_tensor([
                 [cos_theta, 0, sin_theta],
                 [0, 1, 0],
                 [-sin_theta, 0, cos_theta]
             ])
 
         def rotation_matrix_z(theta_degrees):
-            theta = np.radians(theta_degrees)
-            cos_theta = np.cos(theta)
-            sin_theta = np.sin(theta)
-            return np.array([
+            theta = math.radians(theta_degrees)
+            cos_theta = math.cos(theta)
+            sin_theta = math.sin(theta)
+            return target_camtoworlds.new_tensor([
                 [cos_theta, -sin_theta, 0],
                 [sin_theta, cos_theta, 0],
                 [0, 0, 1]
             ])
 
         def rotation_matrix_x(theta_degrees):
-            theta = np.radians(theta_degrees)  # convert degrees to radians
-            cos_theta = np.cos(theta)
-            sin_theta = np.sin(theta)
-            return np.array([
+            theta = math.radians(theta_degrees)
+            cos_theta = math.cos(theta)
+            sin_theta = math.sin(theta)
+            return target_camtoworlds.new_tensor([
                 [1, 0, 0],
                 [0, cos_theta, -sin_theta],
                 [0, sin_theta, cos_theta]
             ])
 
-        R_z = torch.from_numpy(rotation_matrix_z(degree_z))[None, None, None, ...].to(torch.float32).cuda()
-        R_y = torch.from_numpy(rotation_matrix_y(degree_y))[None, None, None, ...].to(torch.float32).cuda()
-        R_x = torch.from_numpy(rotation_matrix_x(degree_x))[None, None, None, ...].to(torch.float32).cuda()
+        target_camtoworlds = data_dict["target_camtoworlds"]
+        rotation = (
+            rotation_matrix_z(degree_z)
+            @ rotation_matrix_y(degree_y)
+            @ rotation_matrix_x(degree_x)
+        )
 
         # translation
-        data_dict["target_camtoworlds"][..., :3, 3] += torch.tensor([[[[trans_x, trans_y, trans_z]]]]).cuda()
+        translation = target_camtoworlds.new_tensor([trans_x, trans_y, trans_z])
+        target_camtoworlds[..., :3, 3].add_(translation)
         # rotation
-        data_dict["target_camtoworlds"][..., :3, :3] @= (R_z @ R_y @ R_x)
+        target_camtoworlds[..., :3, :3] @= rotation
 
     def forward(self, data_dict):
         x = data_dict["context_image"]
