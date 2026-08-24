@@ -1,5 +1,4 @@
 import argparse
-import copy
 import datetime
 import json
 import logging
@@ -147,7 +146,10 @@ def main(args):
     dtype = torch.float16 if os.environ.get('DISABLE_BFLOAT') else torch.bfloat16
 
     if args.use_rotate_cam:
-        rotate_input_dict = copy.deepcopy(input_dict)
+        rotate_input_dict = input_dict.copy()
+        rotate_input_dict["target_camtoworlds"] = input_dict[
+            "target_camtoworlds"
+        ].clone()
         # rotate target camera
         # model.apply_novelview_rt(input_dict, degree_x=-70, degree_y=70, degree_z=0, trans_x=50, trans_y=50, trans_z=100)
         model.apply_novelview_rt(rotate_input_dict, degree_x=-80, degree_y=0, degree_z=0, trans_x=-5, trans_y=-1, trans_z=50)
@@ -169,7 +171,7 @@ def main(args):
                                                     pred_context_depth_conf=predictions['pred_context_depth_conf'],
                                                     pred_context_pts3d=predictions['pred_context_pts3d'],
                                                     pred_context_pts3d_conf=predictions['pred_context_pts3d_conf'])
-        rotate_render_results = copy.deepcopy(rotate_pred_dict["render_results"])
+        rotate_render_results = rotate_pred_dict["render_results"]
 
         del rotate_input_dict, rotate_input_dict_list, predictions, rotate_pred_dict
         torch.cuda.empty_cache()
