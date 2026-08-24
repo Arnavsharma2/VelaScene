@@ -312,6 +312,7 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
     b, tv, c, h, w = data_dict["context"]["image"].shape
     context_t = tv // v
     target_t = data_dict["target"]["image"].shape[1] // v
+    text_label_feats = None
     input_dict = {
         "context_image": data_dict["context"]["image"].reshape(b, context_t, v, c, h, w),
         # targets to render
@@ -368,8 +369,10 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
             input_dict["context_semantic_labels_mask"] = context_semantic_labels_mask
         if is_vis:
             # for visualizing
-            semantic_feats = torch.zeros(context_semantic_labels.shape + (get_text_label_feats(SEMANTIC_LABEL_LIST).shape[-1],))
-            semantic_feats[:] = get_text_label_feats(SEMANTIC_LABEL_LIST)[context_semantic_labels]
+            text_label_feats = get_text_label_feats(SEMANTIC_LABEL_LIST)
+            semantic_feats = text_label_feats[
+                context_semantic_labels.to(text_label_feats.device)
+            ]
             semantic_feats = einops.rearrange(semantic_feats, 'b t v h w c -> b t v c h w', b=b, v=v)
             input_dict["context_feat"] = semantic_feats  # this will be covered by args.online_feat
     # support multiple offline features
@@ -445,8 +448,11 @@ def prepare_inputs_and_targets(data_dict, device=torch.device("cuda"), v=3, time
             target_dict["target_semantic_labels_mask"] = target_semantic_labels_mask
         if is_vis:
             # for visualizing
-            semantic_feats = torch.zeros(target_semantic_labels.shape + (get_text_label_feats(SEMANTIC_LABEL_LIST).shape[-1],))
-            semantic_feats[:] = get_text_label_feats(SEMANTIC_LABEL_LIST)[target_semantic_labels]
+            if text_label_feats is None:
+                text_label_feats = get_text_label_feats(SEMANTIC_LABEL_LIST)
+            semantic_feats = text_label_feats[
+                target_semantic_labels.to(text_label_feats.device)
+            ]
             semantic_feats = einops.rearrange(semantic_feats, 'b t v h w c -> b t v c h w', b=b, v=v)
             target_dict["target_feat"] = semantic_feats  # this will be covered by args.online_feat
     # support multiple offline features
