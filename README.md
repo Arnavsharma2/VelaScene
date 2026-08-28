@@ -365,7 +365,7 @@ python tools/pc_viewer_campose.py \
 
 ## Acknowledgements
 
-VelaScene is not an official SLARM implementation.
+VelaScene is not an official SLARM implementation
 
 The inherited SLARM implementation builds upon **gsplat**, **GaussianSTORM**, and
 **4DGT**. We retain the upstream authors' thanks to those projects and their contributors.
