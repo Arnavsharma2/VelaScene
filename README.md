@@ -352,12 +352,6 @@ python tools/pc_viewer_campose.py \
 
 ## Citation
 
-If you use the inherited model, implementation, or published findings, cite the original
-SLARM paper:
-
-GitHub-readable citation metadata is available in [`CITATION.cff`](CITATION.cff); its
-preferred citation is the original paper below.
-
 ```bibtex
 @InProceedings{Qiu_2026_CVPR,
     author    = {Qiu, Zhicheng and Meng, Jiarui and Luo, Tong-an and Huang, Yican and Feng, Xuan and Li, Xuanfu and Xu, Zhan},
@@ -368,13 +362,6 @@ preferred citation is the original paper below.
     pages     = {29023-29034}
 }
 ```
-
-## Attribution and provenance
-
-VelaScene was independently initialized from
-[kevinchiu19/SLARM](https://github.com/kevinchiu19/SLARM). The upstream MIT license, copyright notice, research authorship, and paper
-citation are preserved. See [`ATTRIBUTION.md`](ATTRIBUTION.md) for the imported revision
-and a concise record of VelaScene's changes.
 
 ## Acknowledgements
 
